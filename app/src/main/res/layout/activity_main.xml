@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_line_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="折线图"/>
+
+    <Button
+        android:id="@+id/btn_line_chart_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="折线图"/>
+
+    <Button
+        android:id="@+id/btn_bar_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="直方图"/>
+
+    <Button
+        android:id="@+id/btn_pie_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="饼状图"/>
+
+    <Button
+        android:id="@+id/btn_meter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="仪表盘"/>
+
+    <Button
+        android:id="@+id/btn_radar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="蜘蛛图"/>
+
+    <Button
+        android:id="@+id/btn_combined"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="柱状加线性"/>
+</LinearLayout>

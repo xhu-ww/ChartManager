@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.nsx.cnwinchart.dashboardview.view.DashboardView
+        android:id="@+id/dashboardView"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        app:centerCircleColor="@color/colorPrimary"
+        app:endProgressColor="@color/colorPrimaryDark"
+        app:progressStrokeWidth="10dp"
+        app:startNumber="0"
+        app:startProgressColor="@color/colorAccent"
+        app:tikeStrColor="@color/colorAccent"
+        app:tikeStrSize="10dp"/>
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dashboardView"
+        android:max="100"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/seekbar"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_temp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="温度"/>
+
+        <Button
+            android:id="@+id/btn_pressure"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="压强"/>
+    </LinearLayout>
+</RelativeLayout>
