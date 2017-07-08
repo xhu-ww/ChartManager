@@ -27,7 +27,7 @@ public class CombinedChartActivity extends AppCompatActivity {
 
         //x轴数据
         List<String> xData = new ArrayList<>();
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 0; i <= 20; i++) {
             xData.add(String.valueOf(i));
         }
         //y轴数据集合
@@ -36,7 +36,7 @@ public class CombinedChartActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             //y轴数
             List<Float> yData = new ArrayList<>();
-            for (int j = 1; j <= 20; j++) {
+            for (int j = 0; j <= 20; j++) {
                 yData.add((float) (Math.random() * 100));
             }
             yBarDatas.add(yData);
@@ -47,7 +47,7 @@ public class CombinedChartActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             //y轴数
             List<Float> yData = new ArrayList<>();
-            for (int j = 1; j <= 20; j++) {
+            for (int j = 0; j <= 20; j++) {
                 yData.add((float) (Math.random() * 100));
             }
             yLineDatas.add(yData);

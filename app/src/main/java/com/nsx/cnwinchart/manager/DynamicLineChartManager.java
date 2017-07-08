@@ -102,9 +102,10 @@ public class DynamicLineChartManager {
         lineDataSet.setColor(color);
         lineDataSet.setCircleColor(color);
         lineDataSet.setHighLightColor(color);
+
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         //设置曲线填充
         lineDataSet.setDrawFilled(true);
-        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         lineDataSet.setValueTextSize(10f);
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         //添加一个空的 LineData

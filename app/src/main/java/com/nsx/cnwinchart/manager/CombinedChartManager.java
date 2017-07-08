@@ -84,10 +84,9 @@ public class CombinedChartManager {
         //设置X轴在底部
         XAxis xAxis = mCombinedChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
         xAxis.setGranularity(1f);
-        xAxis.setLabelCount(xAxisValues.size() - 1);
 
+        xAxis.setLabelCount(xAxisValues.size() - 1,false);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -181,9 +180,10 @@ public class CombinedChartManager {
         barDataSet.setValueTextColor(barColor);
         barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         barData.addDataSet(barDataSet);
-        float barWidth = 0.45f;
 
-        barData.setBarWidth(barWidth);
+        //以下是为了解决 柱状图 左右两边只显示了一半的问题 根据实际情况 而定
+        xAxis.setAxisMinimum(-0.5f);
+        xAxis.setAxisMaximum((float) (barChartY.size()- 0.5));
         return barData;
     }
 
@@ -214,16 +214,12 @@ public class CombinedChartManager {
         }
         BarData barData = new BarData(lists);
 
-        int amount = barChartYs.get(0).size(); //需要显示柱状图的类别 数量
+        int amount = barChartYs.size(); //需要显示柱状图的类别 数量
         float groupSpace = 0.12f; //柱状图组之间的间距
         float barSpace = (float) ((1 - 0.12) / amount / 10); // x4 DataSet
         float barWidth = (float) ((1 - 0.12) / amount / 10 * 9); // x4 DataSet
 
-//        float groupSpace = 0.12f; //柱状图组之间的间距
-//        float barSpace = 0.02f; // x4 DataSet
-//        float barWidth = 0.2f; // x4 DataSet
         // (0.2 + 0.02) * 4 + 0.12 = 1.00 即100% 按照百分百布局
-//        xAxis.setLabelCount(amount - 1, false);
         //柱状图宽度
         barData.setBarWidth(barWidth);
         //(起始点、柱状图组间距、柱状图之间间距)
