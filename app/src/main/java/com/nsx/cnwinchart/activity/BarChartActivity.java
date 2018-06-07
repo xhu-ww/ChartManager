@@ -63,5 +63,9 @@ public class BarChartActivity extends AppCompatActivity {
         barChartManager1.showBarChart(xValues, yValues.get(0), names.get(1), colours.get(3));
         barChartManager2.showBarChart(xValues, yValues, names, colours);
         barChartManager2.setXAxis(11f, 0f, 11);
+        barChartManager1.setYAxis(10000,1,5);
     }
+
+
+
 }

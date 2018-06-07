@@ -86,7 +86,6 @@ public class YAxisRenderer extends AxisRenderer {
                 xPos = mViewPortHandler.contentRight() - xoffset;
             }
         }
-
         drawYLabels(c, xPos, positions, yoffset);
     }
 
@@ -123,6 +122,8 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     protected void drawScale(Canvas canvas, float startY, float offset) {
+        boolean isDrawShortLine = false;
+
         float leftX = mViewPortHandler.contentLeft(); //Y轴在左边的位置
         float rightX = mViewPortHandler.contentRight();//Y轴在右边的位置
         canvas.save();
@@ -130,7 +131,6 @@ public class YAxisRenderer extends AxisRenderer {
             for (int i = 0; i <= 5; i++) {
                 canvas.save();
                 canvas.translate(0, offset * i);
-                boolean isDrawShortLine = false;
                 if (i % 5 == 0) {
                     //刻度线在图表内部
 //                    canvas.drawLine(leftX, startY, leftX + 20, startY, mAxisLinePaint);//画长刻度线
@@ -148,7 +148,7 @@ public class YAxisRenderer extends AxisRenderer {
                 canvas.translate(0, offset * i);
                 if (i % 5 == 0) {
                     canvas.drawLine(rightX, startY, rightX - 20, startY, mAxisLinePaint);//画长刻度线
-                } else {
+                } else if (isDrawShortLine){
                     canvas.drawLine(rightX, startY, rightX - 10, startY, mAxisLinePaint);//画短刻度线
                 }
                 canvas.restore();

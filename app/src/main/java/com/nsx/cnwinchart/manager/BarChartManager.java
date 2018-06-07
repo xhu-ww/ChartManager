@@ -1,6 +1,7 @@
 package com.nsx.cnwinchart.manager;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -153,17 +154,23 @@ public class BarChartManager {
      * @param labelCount
      */
     public void setYAxis(float max, float min, int labelCount) {
-        if (max < min) {
-            return;
-        }
-        leftAxis.setAxisMaximum(max);
-        leftAxis.setAxisMinimum(min);
-        leftAxis.setLabelCount(labelCount, false);
+//        if (max < min) {
+//            return;
+//        }
+//        leftAxis.setAxisMaximum(max);
+//        leftAxis.setAxisMinimum(min);
+//        leftAxis.setLabelCount(labelCount, false);
+//
+//
+//        rightAxis.setAxisMaximum(max);
+//        rightAxis.setAxisMinimum(min);
+//        rightAxis.setLabelCount(labelCount, false);
+//        mBarChart.invalidate();
 
-        rightAxis.setAxisMaximum(max);
-        rightAxis.setAxisMinimum(min);
-        rightAxis.setLabelCount(labelCount, false);
+
+        leftAxis.setAxis(new float[]{0f, 100f, 1000f, 10000f});
         mBarChart.invalidate();
+
     }
 
     /**

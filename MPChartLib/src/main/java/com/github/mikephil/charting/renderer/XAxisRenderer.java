@@ -199,6 +199,8 @@ public class XAxisRenderer extends AxisRenderer {
      * 绘制线
      */
     protected void drawScale(Canvas canvas, float startX, float offset) {
+        boolean isDrawShortLine = false;
+
         float topY = mViewPortHandler.contentTop(); //顶部X轴所在的位置
         float bottomY = mViewPortHandler.contentBottom(); //底部X轴所在的位置
         canvas.save();
@@ -206,7 +208,6 @@ public class XAxisRenderer extends AxisRenderer {
             for (int i = 0; i <= 5; i++) {
                 canvas.save();
                 canvas.translate(offset * i, 0);
-                boolean isDrawShortLine = false;
                 if (i % 5 == 0) {
                     //刻度线在图表内部
 //                    canvas.drawLine(startX, bottomY - 20, startX, bottomY, mAxisLinePaint);//画长刻度线
@@ -224,7 +225,7 @@ public class XAxisRenderer extends AxisRenderer {
                 canvas.translate(offset * i, 0);
                 if (i % 5 == 0) {
                     canvas.drawLine(startX, topY + 20, startX, topY, mAxisLinePaint);//画长刻度线
-                } else {
+                } else if (isDrawShortLine){
                     canvas.drawLine(startX, topY + 10, startX, topY, mAxisLinePaint);//画短刻度线
                 }
                 canvas.restore();
@@ -237,7 +238,7 @@ public class XAxisRenderer extends AxisRenderer {
                     //画长刻度线
                     canvas.drawLine(startX, topY + 20, startX, topY, mAxisLinePaint);//顶部X轴的刻度
                     canvas.drawLine(startX, bottomY - 20, startX, bottomY, mAxisLinePaint);//底部X轴的刻度
-                } else {
+                } else if (isDrawShortLine){
                     //画短刻度线
                     canvas.drawLine(startX, topY + 10, startX, topY, mAxisLinePaint);//顶部X轴的刻度
                     canvas.drawLine(startX, bottomY - 10, startX, bottomY, mAxisLinePaint);//底部X轴的刻度
