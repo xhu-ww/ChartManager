@@ -24,4 +24,10 @@
     <color name="insideBlue">#58ade5</color>
     <color name="white">#FFFFFF</color>
     <color name="insideCircle">#c2b9b0</color>
+
+
+    <color name="blue">#2A8EE3</color>
+    <color name="transparent_gray">#90000000</color>
+    <color name="orange">#FFE8A140</color>
+    <color name="green">#83d383</color>
 </resources>

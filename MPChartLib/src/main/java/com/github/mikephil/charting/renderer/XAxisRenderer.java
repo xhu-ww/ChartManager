@@ -113,7 +113,7 @@ public class XAxisRenderer extends AxisRenderer {
         mAxisLabelPaint.setTextSize(mXAxis.getTextSize());
         mAxisLabelPaint.setColor(mXAxis.getTextColor());
 
-        MPPointF pointF = MPPointF.getInstance(0,0);
+        MPPointF pointF = MPPointF.getInstance(0, 0);
         if (mXAxis.getPosition() == XAxisPosition.TOP) {
             pointF.x = 0.5f;
             pointF.y = 1.0f;
@@ -173,6 +173,82 @@ public class XAxisRenderer extends AxisRenderer {
     }
 
     /**
+     * 绘X轴制刻度线
+     * @param c
+     */
+    public void renderScaleLines(Canvas c) {
+        if (!mXAxis.isDrawScale() || !mXAxis.isEnabled())
+            return;
+        if (mRenderGridLinesBuffer.length != mAxis.mEntryCount * 2) {
+            mRenderGridLinesBuffer = new float[mXAxis.mEntryCount * 2];
+        }
+        float[] positions = mRenderGridLinesBuffer;
+        for (int i = 0; i < positions.length; i += 2) {
+            positions[i] = mXAxis.mEntries[i / 2];
+            positions[i + 1] = mXAxis.mEntries[i / 2];
+        }
+        mTrans.pointValuesToPixel(positions); //获得X轴点对应的像素点位置 即坐标系位置
+        for (int i = 0; i < positions.length - 2; i += 2) {
+            //计算X轴两个值之间的间距/5   =  画布偏移量 即 刻度间距 还是默认5个刻度一组
+            float offset = (positions[2] - positions[0]) / 5;
+            drawScale(c, positions[i], offset);
+        }
+    }
+
+    /**
+     * 绘制线
+     */
+    protected void drawScale(Canvas canvas, float startX, float offset) {
+        float topY = mViewPortHandler.contentTop(); //顶部X轴所在的位置
+        float bottomY = mViewPortHandler.contentBottom(); //底部X轴所在的位置
+        canvas.save();
+        if (mXAxis.getPosition() == XAxisPosition.BOTTOM) { //X轴位置在下方时
+            for (int i = 0; i <= 5; i++) {
+                canvas.save();
+                canvas.translate(offset * i, 0);
+                boolean isDrawShortLine = false;
+                if (i % 5 == 0) {
+                    //刻度线在图表内部
+//                    canvas.drawLine(startX, bottomY - 20, startX, bottomY, mAxisLinePaint);//画长刻度线
+                    //刻度线在图表外面
+                    canvas.drawLine(startX, bottomY + 20, startX, bottomY, mAxisLinePaint);//画长刻度线
+                } else if (isDrawShortLine){
+//                    canvas.drawLine(startX, bottomY - 10, startX, bottomY, mAxisLinePaint);//画短刻度线
+                    canvas.drawLine(startX, bottomY + 10, startX, bottomY, mAxisLinePaint);//画短刻度线
+                }
+                canvas.restore();
+            }
+        } else if (mXAxis.getPosition() == XAxisPosition.TOP) { //X轴位置在上方时
+            for (int i = 0; i <= 5; i++) {
+                canvas.save();
+                canvas.translate(offset * i, 0);
+                if (i % 5 == 0) {
+                    canvas.drawLine(startX, topY + 20, startX, topY, mAxisLinePaint);//画长刻度线
+                } else {
+                    canvas.drawLine(startX, topY + 10, startX, topY, mAxisLinePaint);//画短刻度线
+                }
+                canvas.restore();
+            }
+        } else if (mXAxis.getPosition() == XAxisPosition.BOTH_SIDED) { //上下都有X轴时
+            for (int i = 0; i <= 5; i++) {
+                canvas.save();
+                canvas.translate(offset * i, 0);
+                if (i % 5 == 0) {
+                    //画长刻度线
+                    canvas.drawLine(startX, topY + 20, startX, topY, mAxisLinePaint);//顶部X轴的刻度
+                    canvas.drawLine(startX, bottomY - 20, startX, bottomY, mAxisLinePaint);//底部X轴的刻度
+                } else {
+                    //画短刻度线
+                    canvas.drawLine(startX, topY + 10, startX, topY, mAxisLinePaint);//顶部X轴的刻度
+                    canvas.drawLine(startX, bottomY - 10, startX, bottomY, mAxisLinePaint);//底部X轴的刻度
+                }
+                canvas.restore();
+            }
+        }
+        canvas.restore();
+    }
+
+    /**
      * draws the x-labels on the specified y-position
      *
      * @param pos
@@ -207,7 +283,7 @@ public class XAxisRenderer extends AxisRenderer {
                 if (mXAxis.isAvoidFirstLastClippingEnabled()) {
 
                     // avoid clipping of the last
-                    if (i == mXAxis.mEntryCount - 1 && mXAxis.mEntryCount > 1) {
+                    if (i / 2 == mXAxis.mEntryCount - 1 && mXAxis.mEntryCount > 1) {
                         float width = Utils.calcTextWidth(mAxisLabelPaint, label);
 
                         if (width > mViewPortHandler.offsetRight() * 2
@@ -230,8 +306,10 @@ public class XAxisRenderer extends AxisRenderer {
     protected void drawLabel(Canvas c, String formattedLabel, float x, float y, MPPointF anchor, float angleDegrees) {
         Utils.drawXAxisValue(c, formattedLabel, x, y, mAxisLabelPaint, anchor, angleDegrees);
     }
+
     protected Path mRenderGridLinesPath = new Path();
     protected float[] mRenderGridLinesBuffer = new float[2];
+
     @Override
     public void renderGridLines(Canvas c) {
 
@@ -241,7 +319,7 @@ public class XAxisRenderer extends AxisRenderer {
         int clipRestoreCount = c.save();
         c.clipRect(getGridClippingRect());
 
-        if(mRenderGridLinesBuffer.length != mAxis.mEntryCount * 2){
+        if (mRenderGridLinesBuffer.length != mAxis.mEntryCount * 2) {
             mRenderGridLinesBuffer = new float[mXAxis.mEntryCount * 2];
         }
         float[] positions = mRenderGridLinesBuffer;

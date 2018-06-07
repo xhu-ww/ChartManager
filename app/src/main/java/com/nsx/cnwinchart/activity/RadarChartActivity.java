@@ -14,6 +14,8 @@ import com.nsx.cnwinchart.manager.RadarChartManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.github.mikephil.charting.animation.Easing.EasingOption.EaseInCubic;
+
 /**
  * Created by xhu_ww on 2017/6/26.
  */
@@ -85,7 +87,7 @@ public class RadarChartActivity extends AppCompatActivity {
 
     public void rotation(View view) {
         mRadarChart.spin(2000, mRadarChart.getRotationAngle(), mRadarChart.getRotationAngle() + 360,
-                Easing.EasingOption.EaseInCubic);
+                Easing.getEasingFunctionFromOption(EaseInCubic));
     }
 
     public void isShowY(View view) {

@@ -6,8 +6,10 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.util.Log;
 
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.components.YAxis.YAxisLabelPosition;
@@ -29,7 +31,7 @@ public class YAxisRenderer extends AxisRenderer {
 
         this.mYAxis = yAxis;
 
-        if(mViewPortHandler != null) {
+        if (mViewPortHandler != null) {
 
             mAxisLabelPaint.setColor(Color.BLACK);
             mAxisLabelPaint.setTextSize(Utils.convertDpToPixel(10f));
@@ -107,6 +109,55 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     /**
+     * 绘制Y轴刻度线
+     */
+    public void renderScaleLines(Canvas c) {
+        if (!mYAxis.isDrawScale() || !mYAxis.isEnabled())
+            return;
+        float[] positions = getTransformedPositions();
+        //因为 正常情况下 图表坐标轴在 左下方，所以此处 倒序 由下至上 绘制刻度
+        for (int i = positions.length; i > 2; i -= 2) {
+            float offset = (positions[i - 1] - positions[i - 3]) / 5; //偏移量
+            drawScale(c, positions[i - 3], offset);
+        }
+    }
+
+    protected void drawScale(Canvas canvas, float startY, float offset) {
+        float leftX = mViewPortHandler.contentLeft(); //Y轴在左边的位置
+        float rightX = mViewPortHandler.contentRight();//Y轴在右边的位置
+        canvas.save();
+        if (mYAxis.getAxisDependency() == AxisDependency.LEFT) { //Y轴位置在左边时
+            for (int i = 0; i <= 5; i++) {
+                canvas.save();
+                canvas.translate(0, offset * i);
+                boolean isDrawShortLine = false;
+                if (i % 5 == 0) {
+                    //刻度线在图表内部
+//                    canvas.drawLine(leftX, startY, leftX + 20, startY, mAxisLinePaint);//画长刻度线
+                    //刻度线在图表外面
+                    canvas.drawLine(leftX, startY, leftX - 20, startY, mAxisLinePaint);//画长刻度线
+                } else if (isDrawShortLine) {
+                    canvas.drawLine(leftX, startY, leftX + 10, startY, mAxisLinePaint);//画短刻度线
+                }
+                canvas.restore();
+            }
+        }
+        if (mYAxis.getAxisDependency() == AxisDependency.RIGHT) { //Y轴位置在右边时
+            for (int i = 0; i <= 5; i++) {
+                canvas.save();
+                canvas.translate(0, offset * i);
+                if (i % 5 == 0) {
+                    canvas.drawLine(rightX, startY, rightX - 20, startY, mAxisLinePaint);//画长刻度线
+                } else {
+                    canvas.drawLine(rightX, startY, rightX - 10, startY, mAxisLinePaint);//画短刻度线
+                }
+                canvas.restore();
+            }
+        }
+        canvas.restore();
+    }
+
+    /**
      * draws the y-labels on the specified x-position
      *
      * @param fixedPosition
@@ -129,6 +180,7 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     protected Path mRenderGridLinesPath = new Path();
+
     @Override
     public void renderGridLines(Canvas c) {
 
@@ -190,6 +242,7 @@ public class YAxisRenderer extends AxisRenderer {
     }
 
     protected float[] mGetTransformedPositionsBuffer = new float[2];
+
     /**
      * Transforms the values contained in the axis entries to screen pixels and returns them in form of a float array
      * of x- and y-coordinates.
@@ -198,7 +251,7 @@ public class YAxisRenderer extends AxisRenderer {
      */
     protected float[] getTransformedPositions() {
 
-        if(mGetTransformedPositionsBuffer.length != mYAxis.mEntryCount * 2){
+        if (mGetTransformedPositionsBuffer.length != mYAxis.mEntryCount * 2) {
             mGetTransformedPositionsBuffer = new float[mYAxis.mEntryCount * 2];
         }
         float[] positions = mGetTransformedPositionsBuffer;
@@ -236,16 +289,69 @@ public class YAxisRenderer extends AxisRenderer {
 
         zeroLinePath.moveTo(mViewPortHandler.contentLeft(), (float) pos.y);
         zeroLinePath.lineTo(mViewPortHandler.contentRight(), (float) pos.y);
-
         // draw a path because lines don't support dashing on lower android versions
         c.drawPath(zeroLinePath, mZeroLinePaint);
-
         c.restoreToCount(clipRestoreCount);
     }
+
+    /**
+     * 绘制原点线的刻度线
+     *
+     * @param c
+     * @param mXAxis
+     */
+    public void drawZeroLineScale(Canvas c, XAxis mXAxis) {
+        if (!mYAxis.isDrawZeroLineEnabled()) {
+            return;
+        }
+        MPPointD pos = mTrans.getPixelForValues(0f, 0f);
+        if (mYAxis != null) {
+            float[] positions = new float[mXAxis.mEntryCount * 2];
+            for (int i = 0; i < positions.length; i += 2) {
+                positions[i] = mXAxis.mEntries[i / 2];
+                positions[i + 1] = mXAxis.mEntries[i / 2];
+            }
+            mTrans.pointValuesToPixel(positions); //获得X轴点对应的像素点位置 即坐标系位置
+            for (int i = 0; i < positions.length - 2; i += 2) {
+                //计算X轴两个值之间的间距/5   =  画布偏移量 即 刻度间距 还是默认5个刻度一组
+                float offset = (positions[2] - positions[0]) / 5;
+                drawZeroScale(c, (float) pos.y, positions[i], offset);
+            }
+        }
+    }
+
+    /**
+     * 绘制原点线的刻度线
+     *
+     * @param zeroPosition 原点位置
+     * @param startX       X轴起始位置
+     * @param offset       偏移量
+     */
+    protected void drawZeroScale(Canvas canvas, float zeroPosition, float startX, float offset) {
+        canvas.save();
+        for (int i = 0; i <= 5; i++) {
+            canvas.save();
+            canvas.translate(offset * i, 0);
+            boolean isDrawShortLine = false;
+            if (i % 5 == 0) {
+                //刻度线在图表内部
+//                    canvas.drawLine(startX, zeroPosition - 20, startX, zeroPosition, mAxisLinePaint);//画长刻度线
+                //刻度线在图表外面
+                canvas.drawLine(startX, zeroPosition + 20, startX, zeroPosition, mAxisLinePaint);//画长刻度线
+            } else if (isDrawShortLine) {
+//                    canvas.drawLine(startX, zeroPosition - 10, startX, zeroPosition, mAxisLinePaint);//画短刻度线
+                canvas.drawLine(startX, zeroPosition + 10, startX, zeroPosition, mAxisLinePaint);//画短刻度线
+            }
+            canvas.restore();
+        }
+        canvas.restore();
+    }
+
 
     protected Path mRenderLimitLines = new Path();
     protected float[] mRenderLimitLinesBuffer = new float[2];
     protected RectF mLimitLineClippingRect = new RectF();
+
     /**
      * Draws the LimitLines associated with this axis to the screen.
      *
