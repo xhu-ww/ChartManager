@@ -82,7 +82,6 @@ public class LineChartActivity extends AppCompatActivity {
         Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
         lineChartManager1.setChartFillDrawable(drawable);
         lineChartManager1.setMarkerView(this);
-
     }
 
     View.OnClickListener listener = new View.OnClickListener() {

@@ -1,7 +1,6 @@
 package com.nsx.cnwinchart.manager;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -14,6 +13,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.nsx.cnwinchart.data.BarChartBean.StFinDateBean.VtDateValueBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,54 +22,100 @@ import java.util.List;
  * Created by loptop on 2017/6/2.
  */
 public class BarChartManager {
-    private BarChart mBarChart;
-    private YAxis leftAxis;
-    private YAxis rightAxis;
-    private XAxis xAxis;
+
+    private BarChart barChart;
+    private YAxis leftAxis;             //左侧Y轴
+    private YAxis rightAxis;            //右侧Y轴
+    private XAxis xAxis;                //X轴
+    private Legend legend;              //图例
+    private LimitLine limitLine;        //限制线
 
     public BarChartManager(BarChart barChart) {
-        this.mBarChart = barChart;
-        leftAxis = mBarChart.getAxisLeft();
-        rightAxis = mBarChart.getAxisRight();
-        xAxis = mBarChart.getXAxis();
+        this.barChart = barChart;
+        leftAxis = this.barChart.getAxisLeft();
+        rightAxis = this.barChart.getAxisRight();
+        xAxis = this.barChart.getXAxis();
     }
 
     /**
-     * 初始化LineChart
+     * 初始化BarChart图表
      */
-    private void initLineChart() {
+    private void initBarChart(BarChart barChart) {
+        /***图表设置***/
         //背景颜色
-        mBarChart.setBackgroundColor(Color.WHITE);
-        //网格
-        mBarChart.setDrawGridBackground(false);
+        barChart.setBackgroundColor(Color.WHITE);
+        //不显示图表网格
+        barChart.setDrawGridBackground(false);
         //背景阴影
-        mBarChart.setDrawBarShadow(false);
-        mBarChart.setHighlightFullBarEnabled(false);
-
+        barChart.setDrawBarShadow(false);
+        barChart.setHighlightFullBarEnabled(false);
         //显示边界
-        mBarChart.setDrawBorders(true);
+        barChart.setDrawBorders(true);
         //设置动画效果
-        mBarChart.animateY(1000, Easing.EasingOption.Linear);
-        mBarChart.animateX(1000, Easing.EasingOption.Linear);
+        barChart.animateY(1000, Easing.Linear);
+        barChart.animateX(1000, Easing.Linear);
 
-        //折线图例 标签 设置
-        Legend legend = mBarChart.getLegend();
+        /***XY轴的设置***/
+        //X轴设置显示位置在底部
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setGranularity(1f);
+        //保证Y轴从0开始，不然会上移一点
+        leftAxis.setAxisMinimum(0f);
+        rightAxis.setAxisMinimum(0f);
+
+        /***折线图例 标签 设置***/
+        Legend legend = barChart.getLegend();
         legend.setForm(Legend.LegendForm.LINE);
         legend.setTextSize(11f);
         //显示位置
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        //是否绘制在图表里面
         legend.setDrawInside(false);
-
-        //XY轴的设置
-        //X轴设置显示位置在底部
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(1f);
-        //保证Y轴从0开始，不然会上移一点
-        leftAxis.setAxisMinimum(0f);
-        rightAxis.setAxisMinimum(0f);
     }
+
+
+    /**
+     * 柱状图始化设置 一个BarDataSet 代表一列柱状图
+     *
+     * @param barDataSet 柱状图
+     * @param color      柱状图颜色
+     */
+    private void initBarDataSet(BarDataSet barDataSet, int color) {
+        barDataSet.setColor(color);
+        barDataSet.setFormLineWidth(1f);
+        barDataSet.setFormSize(15.f);
+        //不显示柱状图顶部值
+        barDataSet.setDrawValues(false);
+//        barDataSet.setValueTextSize(10f);
+//        barDataSet.setValueTextColor(color);
+    }
+
+    public void showBarChart(List<VtDateValueBean> dateValueList, String name, int color) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < dateValueList.size(); i++) {
+            /**
+             * 此处还可传入Drawable对象 BarEntry(float x, float y, Drawable icon)
+             * 即可设置柱状图顶部的 icon展示
+             */
+            BarEntry barEntry = new BarEntry(i, (float) dateValueList.get(i).getFValue());
+            entries.add(barEntry);
+        }
+        // 每一个BarDataSet代表一类柱状图
+        BarDataSet barDataSet = new BarDataSet(entries, name);
+        initBarDataSet(barDataSet, color);
+
+//        // 添加多个BarDataSet时
+//        ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+//        dataSets.add(barDataSet);
+//        BarData data = new BarData(dataSets);
+
+        BarData data = new BarData(barDataSet);
+        barChart.setData(data);
+    }
+
 
     /**
      * 展示柱状图(一条)
@@ -80,7 +126,7 @@ public class BarChartManager {
      * @param color
      */
     public void showBarChart(List<Float> xAxisValues, List<Float> yAxisValues, String label, int color) {
-        initLineChart();
+        initBarChart(barChart);
         ArrayList<BarEntry> entries = new ArrayList<>();
         for (int i = 0; i < xAxisValues.size(); i++) {
             entries.add(new BarEntry(xAxisValues.get(i), yAxisValues.get(i)));
@@ -98,7 +144,7 @@ public class BarChartManager {
         BarData data = new BarData(dataSets);
         //设置X轴的刻度数
         xAxis.setLabelCount(xAxisValues.size() - 1, false);
-        mBarChart.setData(data);
+        barChart.setData(data);
     }
 
     /**
@@ -110,7 +156,7 @@ public class BarChartManager {
      * @param colours
      */
     public void showBarChart(List<Float> xAxisValues, List<List<Float>> yAxisValues, List<String> labels, List<Integer> colours) {
-        initLineChart();
+        initBarChart(barChart);
         BarData data = new BarData();
         for (int i = 0; i < yAxisValues.size(); i++) {
             ArrayList<BarEntry> entries = new ArrayList<>();
@@ -142,7 +188,7 @@ public class BarChartManager {
         //(起始点、柱状图组间距、柱状图之间间距)
         data.groupBars(0, groupSpace, barSpace);
 
-        mBarChart.setData(data);
+        barChart.setData(data);
     }
 
 
@@ -165,11 +211,11 @@ public class BarChartManager {
 //        rightAxis.setAxisMaximum(max);
 //        rightAxis.setAxisMinimum(min);
 //        rightAxis.setLabelCount(labelCount, false);
-//        mBarChart.invalidate();
+//        barChart.invalidate();
 
 
         leftAxis.setAxis(new float[]{0f, 100f, 1000f, 10000f});
-        mBarChart.invalidate();
+        barChart.invalidate();
 
     }
 
@@ -185,7 +231,7 @@ public class BarChartManager {
         xAxis.setAxisMinimum(min);
         xAxis.setLabelCount(labelCount, false);
 
-        mBarChart.invalidate();
+        barChart.invalidate();
     }
 
     /**
@@ -204,7 +250,7 @@ public class BarChartManager {
         hightLimit.setLineColor(color);
         hightLimit.setTextColor(color);
         leftAxis.addLimitLine(hightLimit);
-        mBarChart.invalidate();
+        barChart.invalidate();
     }
 
     /**
@@ -221,7 +267,7 @@ public class BarChartManager {
         hightLimit.setLineWidth(4f);
         hightLimit.setTextSize(10f);
         leftAxis.addLimitLine(hightLimit);
-        mBarChart.invalidate();
+        barChart.invalidate();
     }
 
     /**
@@ -232,7 +278,7 @@ public class BarChartManager {
     public void setDescription(String str) {
         Description description = new Description();
         description.setText(str);
-        mBarChart.setDescription(description);
-        mBarChart.invalidate();
+        barChart.setDescription(description);
+        barChart.invalidate();
     }
 }

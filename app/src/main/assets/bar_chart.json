@@ -1,60 +1,56 @@
 {
-  "vtFinDateRst": [
-    {
-      "eFinType": 3,
-      "stFinDate": {
-        "fVal": 5.2585,
-        "sDtSecCode": "0001000063",
-        "sFinanceDesc": "净资产收益率5.26%，行业排名4/97",
-        "stIndSTRank": {
-          "iDtNum": 97,
-          "iRank": 4
-        },
-        "vtDateValue": [
-          {
-            "fValue": 4.3995,
-            "sYearMonth": "2017-03"
-          },
-          {
-            "fValue": 7.9092,
-            "sYearMonth": "2017-06"
-          },
-          {
-            "fValue": 12.6504,
-            "sYearMonth": "2017-09"
-          },
-          {
-            "fValue": 14.4348,
-            "sYearMonth": "2017-12"
-          },
-          {
-            "fValue": 5.2585,
-            "sYearMonth": "2018-03"
-          }
-        ],
-        "vtDateValueAvg": [
-          {
-            "fValue": 0.97779,
-            "sYearMonth": "2017-03"
-          },
-          {
-            "fValue": 3.42839,
-            "sYearMonth": "2017-06"
-          },
-          {
-            "fValue": 4.48451,
-            "sYearMonth": "2017-09"
-          },
-          {
-            "fValue": 0.758816,
-            "sYearMonth": "2017-12"
-          },
-          {
-            "fValue": 0.765194,
-            "sYearMonth": "2018-03"
-          }
-        ]
+  "eFinType": 3,
+  "stFinDate": {
+    "fVal": -21.7467,
+    "sDtSecCode": "0001000063",
+    "sFinanceDesc": "净资产收益率-21.75%，行业排名100/101",
+    "stIndSTRank": {
+      "iDtNum": 101,
+      "iRank": 100
+    },
+    "vtDateValue": [
+      {
+        "fValue": -21.7467,
+        "sYearMonth": "2018-03"
+      },
+      {
+        "fValue": 14.4348,
+        "sYearMonth": "2017-12"
+      },
+      {
+        "fValue": 12.6504,
+        "sYearMonth": "2017-09"
+      },
+      {
+        "fValue": 7.9092,
+        "sYearMonth": "2017-06"
+      },
+      {
+        "fValue": 4.3995,
+        "sYearMonth": "2017-03"
       }
-    }
-  ]
+    ],
+    "vtDateValueAvg": [
+      {
+        "fValue": 0.95137,
+        "sYearMonth": "2017-03"
+      },
+      {
+        "fValue": 3.50875,
+        "sYearMonth": "2017-06"
+      },
+      {
+        "fValue": 4.62725,
+        "sYearMonth": "2017-09"
+      },
+      {
+        "fValue": 1.38761,
+        "sYearMonth": "2017-12"
+      },
+      {
+        "fValue": 0.61198,
+        "sYearMonth": "2018-03"
+      }
+    ]
+  }
 }

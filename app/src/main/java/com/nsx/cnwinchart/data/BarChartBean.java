@@ -8,180 +8,171 @@ import java.util.List;
  */
 public class BarChartBean {
 
-    private List<VtFinDateRstBean> vtFinDateRst;
+    private int eFinType;
+    private StFinDateBean stFinDate;
 
-    public List<VtFinDateRstBean> getVtFinDateRst() {
-        return vtFinDateRst;
+    public int getEFinType() {
+        return eFinType;
     }
 
-    public void setVtFinDateRst(List<VtFinDateRstBean> vtFinDateRst) {
-        this.vtFinDateRst = vtFinDateRst;
+    public void setEFinType(int eFinType) {
+        this.eFinType = eFinType;
     }
 
-    public static class VtFinDateRstBean {
+    public StFinDateBean getStFinDate() {
+        return stFinDate;
+    }
+
+    public void setStFinDate(StFinDateBean stFinDate) {
+        this.stFinDate = stFinDate;
+    }
+
+    public static class StFinDateBean {
         /**
-         * eFinType : 3
-         * stFinDate : {"fVal":5.2585,"sDtSecCode":"0001000063","sFinanceDesc":"净资产收益率5.26%，行业排名4/97","stIndSTRank":{"iDtNum":97,"iRank":4},"vtDateValue":[{"fValue":5.2585,"sYearMonth":"2018-03"},{"fValue":14.4348,"sYearMonth":"2017-12"},{"fValue":12.6504,"sYearMonth":"2017-09"},{"fValue":7.9092,"sYearMonth":"2017-06"},{"fValue":4.3995,"sYearMonth":"2017-03"}],"vtDateValueAvg":[{"fValue":9.70251,"sYearMonth":"2016-12"},{"fValue":0.97779,"sYearMonth":"2017-03"},{"fValue":3.42839,"sYearMonth":"2017-06"},{"fValue":4.48451,"sYearMonth":"2017-09"},{"fValue":0.758816,"sYearMonth":"2017-12"},{"fValue":0.765194,"sYearMonth":"2018-03"}]}
+         * fVal : -21.7467
+         * sDtSecCode : 0001000063
+         * sFinanceDesc : 净资产收益率-21.75%，行业排名100/101
+         * stIndSTRank : {"iDtNum":101,"iRank":100}
+         * vtDateValue : [{"fValue":-21.7467,"sYearMonth":"2018-03"},{"fValue":14.4348,"sYearMonth":"2017-12"},{"fValue":12.6504,"sYearMonth":"2017-09"},{"fValue":7.9092,"sYearMonth":"2017-06"},{"fValue":4.3995,"sYearMonth":"2017-03"}]
+         * vtDateValueAvg : [{"fValue":7.50136,"sYearMonth":"2016-12"},{"fValue":0.95137,"sYearMonth":"2017-03"},{"fValue":3.50875,"sYearMonth":"2017-06"},{"fValue":4.62725,"sYearMonth":"2017-09"},{"fValue":1.38761,"sYearMonth":"2017-12"},{"fValue":0.61198,"sYearMonth":"2018-03"},{"fValue":4.45657,"sYearMonth":"2018-06"}]
          */
 
-        private int eFinType;
-        private StFinDateBean stFinDate;
+        private double fVal;
+        private String sDtSecCode;
+        private String sFinanceDesc;
+        private StIndSTRankBean stIndSTRank;
+        private List<VtDateValueBean> vtDateValue;
+        private List<VtDateValueAvgBean> vtDateValueAvg;
 
-        public int getEFinType() {
-            return eFinType;
+        public double getFVal() {
+            return fVal;
         }
 
-        public void setEFinType(int eFinType) {
-            this.eFinType = eFinType;
+        public void setFVal(double fVal) {
+            this.fVal = fVal;
         }
 
-        public StFinDateBean getStFinDate() {
-            return stFinDate;
+        public String getSDtSecCode() {
+            return sDtSecCode;
         }
 
-        public void setStFinDate(StFinDateBean stFinDate) {
-            this.stFinDate = stFinDate;
+        public void setSDtSecCode(String sDtSecCode) {
+            this.sDtSecCode = sDtSecCode;
         }
 
-        public static class StFinDateBean {
+        public String getSFinanceDesc() {
+            return sFinanceDesc;
+        }
+
+        public void setSFinanceDesc(String sFinanceDesc) {
+            this.sFinanceDesc = sFinanceDesc;
+        }
+
+        public StIndSTRankBean getStIndSTRank() {
+            return stIndSTRank;
+        }
+
+        public void setStIndSTRank(StIndSTRankBean stIndSTRank) {
+            this.stIndSTRank = stIndSTRank;
+        }
+
+        public List<VtDateValueBean> getVtDateValue() {
+            return vtDateValue;
+        }
+
+        public void setVtDateValue(List<VtDateValueBean> vtDateValue) {
+            this.vtDateValue = vtDateValue;
+        }
+
+        public List<VtDateValueAvgBean> getVtDateValueAvg() {
+            return vtDateValueAvg;
+        }
+
+        public void setVtDateValueAvg(List<VtDateValueAvgBean> vtDateValueAvg) {
+            this.vtDateValueAvg = vtDateValueAvg;
+        }
+
+        public static class StIndSTRankBean {
             /**
-             * fVal : 5.2585
-             * sDtSecCode : 0001000063
-             * sFinanceDesc : 净资产收益率5.26%，行业排名4/97
-             * stIndSTRank : {"iDtNum":97,"iRank":4}
-             * vtDateValue : [{"fValue":5.2585,"sYearMonth":"2018-03"},{"fValue":14.4348,"sYearMonth":"2017-12"},{"fValue":12.6504,"sYearMonth":"2017-09"},{"fValue":7.9092,"sYearMonth":"2017-06"},{"fValue":4.3995,"sYearMonth":"2017-03"}]
-             * vtDateValueAvg : [{"fValue":9.70251,"sYearMonth":"2016-12"},{"fValue":0.97779,"sYearMonth":"2017-03"},{"fValue":3.42839,"sYearMonth":"2017-06"},{"fValue":4.48451,"sYearMonth":"2017-09"},{"fValue":0.758816,"sYearMonth":"2017-12"},{"fValue":0.765194,"sYearMonth":"2018-03"}]
+             * iDtNum : 101
+             * iRank : 100
              */
 
-            private double fVal;
-            private String sDtSecCode;
-            private String sFinanceDesc;
-            private StIndSTRankBean stIndSTRank;
-            private List<VtDateValueBean> vtDateValue;
-            private List<VtDateValueAvgBean> vtDateValueAvg;
+            private int iDtNum;
+            private int iRank;
 
-            public double getFVal() {
-                return fVal;
+            public int getIDtNum() {
+                return iDtNum;
             }
 
-            public void setFVal(double fVal) {
-                this.fVal = fVal;
+            public void setIDtNum(int iDtNum) {
+                this.iDtNum = iDtNum;
             }
 
-            public String getSDtSecCode() {
-                return sDtSecCode;
+            public int getIRank() {
+                return iRank;
             }
 
-            public void setSDtSecCode(String sDtSecCode) {
-                this.sDtSecCode = sDtSecCode;
+            public void setIRank(int iRank) {
+                this.iRank = iRank;
             }
+        }
 
-            public String getSFinanceDesc() {
-                return sFinanceDesc;
-            }
-
-            public void setSFinanceDesc(String sFinanceDesc) {
-                this.sFinanceDesc = sFinanceDesc;
-            }
-
-            public StIndSTRankBean getStIndSTRank() {
-                return stIndSTRank;
-            }
-
-            public void setStIndSTRank(StIndSTRankBean stIndSTRank) {
-                this.stIndSTRank = stIndSTRank;
-            }
-
-            public List<VtDateValueBean> getVtDateValue() {
-                return vtDateValue;
-            }
-
-            public void setVtDateValue(List<VtDateValueBean> vtDateValue) {
-                this.vtDateValue = vtDateValue;
-            }
-
-            public List<VtDateValueAvgBean> getVtDateValueAvg() {
-                return vtDateValueAvg;
-            }
-
-            public void setVtDateValueAvg(List<VtDateValueAvgBean> vtDateValueAvg) {
-                this.vtDateValueAvg = vtDateValueAvg;
-            }
-
-            public static class StIndSTRankBean {
-                /**
-                 * iDtNum : 97
-                 * iRank : 4
-                 */
-
-                private int iDtNum;
-                private int iRank;
-
-                public int getIDtNum() {
-                    return iDtNum;
-                }
-
-                public void setIDtNum(int iDtNum) {
-                    this.iDtNum = iDtNum;
-                }
-
-                public int getIRank() {
-                    return iRank;
-                }
-
-                public void setIRank(int iRank) {
-                    this.iRank = iRank;
-                }
-            }
-
+        /**
+         * 公司净资产收益率
+         */
+        public static class VtDateValueBean {
             /**
-             * 净资产收益率
+             * fValue : -21.7467
+             * sYearMonth : 2018-03
              */
-            public static class VtDateValueBean {
 
-                private double fValue;
-                private String sYearMonth;
+            private double fValue;
+            private String sYearMonth;
 
-                public double getFValue() {
-                    return fValue;
-                }
-
-                public void setFValue(double fValue) {
-                    this.fValue = fValue;
-                }
-
-                public String getSYearMonth() {
-                    return sYearMonth;
-                }
-
-                public void setSYearMonth(String sYearMonth) {
-                    this.sYearMonth = sYearMonth;
-                }
+            public double getFValue() {
+                return fValue;
             }
 
+            public void setFValue(double fValue) {
+                this.fValue = fValue;
+            }
+
+            public String getSYearMonth() {
+                return sYearMonth;
+            }
+
+            public void setSYearMonth(String sYearMonth) {
+                this.sYearMonth = sYearMonth;
+            }
+        }
+
+        /**
+         * 行业平均值
+         */
+        public static class VtDateValueAvgBean {
             /**
-             * 行业平均水平值
+             * fValue : 7.50136
+             * sYearMonth : 2016-12
              */
-            public static class VtDateValueAvgBean {
 
-                private double fValue;
-                private String sYearMonth;
+            private double fValue;
+            private String sYearMonth;
 
-                public double getFValue() {
-                    return fValue;
-                }
+            public double getFValue() {
+                return fValue;
+            }
 
-                public void setFValue(double fValue) {
-                    this.fValue = fValue;
-                }
+            public void setFValue(double fValue) {
+                this.fValue = fValue;
+            }
 
-                public String getSYearMonth() {
-                    return sYearMonth;
-                }
+            public String getSYearMonth() {
+                return sYearMonth;
+            }
 
-                public void setSYearMonth(String sYearMonth) {
-                    this.sYearMonth = sYearMonth;
-                }
+            public void setSYearMonth(String sYearMonth) {
+                this.sYearMonth = sYearMonth;
             }
         }
     }
