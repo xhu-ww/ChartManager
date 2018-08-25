@@ -6,13 +6,18 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.View;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -20,7 +25,9 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.nsx.cnwinchart.R;
 import com.nsx.cnwinchart.data.BarChartBean;
 import com.nsx.cnwinchart.data.BarChartBean.StFinDateBean;
@@ -51,6 +58,9 @@ public class BarChartActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_chart);
+        TextView dataSet1TextView = findViewById(R.id.dataSet1TextView);
+        TextView dataSet2TextView = findViewById(R.id.dataSet2TextView);
+
 
         barChart = findViewById(R.id.bar_chart);
         initBarChart(barChart);
@@ -81,6 +91,32 @@ public class BarChartActivity extends AppCompatActivity {
         chartDataMap.put("行业平均值（%）", yValue2);
 
         showBarChart(xValues, chartDataMap, colors);
+
+        barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                //得到包含此柱状图的 数据集
+                BarDataSet dataSets = (BarDataSet) barChart.getBarData().getDataSetForEntry(e);
+                dataSet1TextView.setText("被点击的柱状图名称：\n" + dataSets.getLabel() + "X轴：" + (int) e.getX() + "    Y轴" + e.getX());
+
+                StringBuffer allBarChart = new StringBuffer();
+                allBarChart.append("所有柱状图：\n");
+                for (IBarDataSet dataSet : barChart.getBarData().getDataSets()) {
+                    BarEntry entry = dataSet.getEntryForIndex((int) e.getX());
+                    allBarChart.append(dataSet.getLabel())
+                            .append("X轴：")
+                            .append((int) entry.getX())
+                            .append("    Y轴")
+                            .append(entry.getY())
+                            .append("\n");
+                }
+                dataSet2TextView.setText(allBarChart.toString());
+            }
+
+            @Override
+            public void onNothingSelected() {
+            }
+        });
     }
 
     /**
@@ -95,6 +131,17 @@ public class BarChartActivity extends AppCompatActivity {
         //背景阴影
         barChart.setDrawBarShadow(false);
         barChart.setHighlightFullBarEnabled(false);
+
+        barChart.setDoubleTapToZoomEnabled(false);
+        //禁止拖拽
+        barChart.setDragEnabled(false);
+        //X轴或Y轴禁止缩放
+        barChart.setScaleXEnabled(false);
+        barChart.setScaleYEnabled(false);
+        barChart.setScaleEnabled(false);
+        //禁止所有事件
+//        barChart.setTouchEnabled(false);
+
 
         //不显示边框
         barChart.setDrawBorders(false);
@@ -183,6 +230,11 @@ public class BarChartActivity extends AppCompatActivity {
             List<BarEntry> entries = new ArrayList<>();
 
             for (int i = 0; i < yValueList.size(); i++) {
+                /**
+                 *  如果需要添加TAG标志 可使用以下构造方法
+                 *  BarEntry(float x, float y, Object data)
+                 *  e.getData()
+                 */
                 entries.add(new BarEntry(i, yValueList.get(i)));
             }
             // 每一个BarDataSet代表一类柱状图
@@ -227,7 +279,6 @@ public class BarChartActivity extends AppCompatActivity {
         //(起始点、柱状图组间距、柱状图之间间距)
         data.groupBars(0f, groupSpace, barSpace);
         barChart.setData(data);
-
 
         xAxis.setAxisMinimum(0f);
         xAxis.setAxisMaximum(xValues.size());
